@@ -1,13 +1,24 @@
 import React from "react";
 import Formulario from "./formulario.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Item from "./item.jsx"
+import { addTodoInServer, getTodos } from "../methods.js";
 
 const Home = () => {
 	const [todos, setTodos]=useState([]);
+	useEffect (()=>{
+		const updateTodos = async()=>{
+			const todosFromService = await getTodos()
+			setTodos(todosFromService)
+
+		}
+		updateTodos()
+	},[])
+
 	const addTodo=(text)=>{
 		let id = [];		
-		let todo={id:id, text: text, completed:false}
+		let todo={id:id, label: text, completed:false}
+		addTodoInServer(todo)
 		let newTodos=[...todos, todo]
 		console.log(newTodos)
 		setTodos(newTodos)
